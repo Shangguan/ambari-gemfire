@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+
+<configuration>
+
+  <property>
+    <name>locator_piddir</name>
+    <value>/data/gemfire/locator</value>
+    <description>GemFire Locator process ID directory.</description>
+  </property>
+
+  <property>
+    <name>server_piddir</name>
+    <value>/data/gemfire/server</value>
+    <description>GemFire Server process ID directory.</description>
+  </property>
+  
+</configuration> 

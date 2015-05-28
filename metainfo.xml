@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<metainfo>
+    <schemaVersion>2.0</schemaVersion>
+    <services>
+        <service>
+            <name>GEMFIRE</name>
+            <displayName>GemFire</displayName>
+            <comment>In Memory Data Grid</comment>
+            <version>0.1</version>
+            <components>
+                <component>
+                    <name>GEMFIRE_LOCATOR</name>
+                    <displayName>GemFire Locator</displayName>
+                    <category>MASTER</category>
+                    <cardinality>1+</cardinality>
+                    <commandScript>
+                        <script>scripts/master.py</script>
+                        <scriptType>PYTHON</scriptType>
+                        <timeout>600</timeout>
+                    </commandScript>
+                </component>
+                <component>
+                    <name>GEMFIRE_SERVER</name>
+                    <displayName>GemFire Server</displayName>
+                    <category>SLAVE</category>
+                    <cardinality>1+</cardinality>
+                    <commandScript>
+                        <script>scripts/slave.py</script>
+                        <scriptType>PYTHON</scriptType>
+                        <timeout>600</timeout>
+                    </commandScript>
+                </component>
+             </components>
+            <configuration-dependencies>
+              <config-type>gemfire-config</config-type>
+            </configuration-dependencies>
+        </service>
+    </services>
+</metainfo>

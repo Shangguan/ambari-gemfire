@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+ 
+<configuration>
+
+  <property>
+    <name>gemfire.installation.file.path</name>
+    <value>/data/Pivotal_GemFire_810_b50625_Linux.tar.gz</value>
+    <description>File path of GemFire installation file (.tar.gz).</description>
+  </property>
+
+  <property>
+    <name>gemfire.user</name>
+    <value>gemfire</value>
+    <description>Linux user account for gemfire install and processes.</description>
+  </property>
+
+  <property>
+    <name>gemfire.group</name>
+    <value>gemfire</value>
+    <description>Linux group for gemfire install and processes.</description>
+  </property>
+
+  <property>
+    <name>gemfire.user.password</name>
+    <value>gemfire</value>
+    <property-type>PASSWORD</property-type>
+    <description>GemFire user password.</description>
+  </property>
+
+  <property>
+    <name>gemfire.installation.directory</name>
+    <value>/opt/pivotal</value>
+    <description>Installation directory for GemFire.</description>
+  </property>
+
+  <property>
+    <name>gemfire.locator.working.directory</name>
+    <value>/data/gemfire/locator</value>
+    <description>Working directory for GemFire locator.</description>
+  </property>
+
+  <property>
+    <name>gemfire.locator.port</name>
+    <value>10334</value>
+    <description>Port for GemFire locator. Default is 10334.</description>
+  </property>
+
+  <property>
+    <name>gemfire.server.working.directory</name>
+    <value>/data/gemfire/server</value>
+    <description>Working directory for GemFire server.</description>
+  </property>
+
+  <property>
+    <name>gemfire.server.port</name>
+    <value>10334</value>
+    <description>Port for GemFire server. Default is 10334</description>
+  </property>
+  
+</configuration>

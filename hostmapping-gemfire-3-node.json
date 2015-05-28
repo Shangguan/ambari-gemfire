@@ -1,0 +1,24 @@
+{
+  "blueprint": "blueprint-gemfire-3-node",
+  "host_groups": [
+    {
+      "name": "gemfire_locator",
+      "hosts": [
+        {
+          "fqdn": "c6401.ambari.apache.org"
+        }
+      ]
+    },
+    {
+      "name": "gemfire_server",
+      "hosts": [
+        {
+          "fqdn": "c6402.ambari.apache.org"
+        },
+        {
+          "fqdn": "c6403.ambari.apache.org"
+        }
+      ]
+    }
+  ]
+}

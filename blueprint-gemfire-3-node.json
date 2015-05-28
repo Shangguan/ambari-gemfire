@@ -1,0 +1,35 @@
+{
+  "configurations" : [
+    {
+        "gemfire-config": {
+            "gemfire.installation.file.path": "/vagrant/Pivotal_GemFire_810_b50625_Linux.tar.gz"
+        }
+    }],
+  "host_groups" : [
+    {
+      "name" : "gemfire_locator",
+      "configurations" : [ ],
+      "components" : [
+        {
+          "name" : "GEMFIRE_LOCATOR"
+        }
+      ],
+      "cardinality" : "1"
+    },
+    {
+      "name" : "gemfire_server",
+      "configurations" : [ ],
+      "components" : [
+        {
+          "name" : "GEMFIRE_SERVER"
+        }
+      ],
+      "cardinality" : "2"
+    }
+  ],
+  "Blueprints" : {
+    "blueprint_name" : "blueprint-gemfire-3-node",
+    "stack_name" : "HDP",
+    "stack_version" : "2.2"
+  }
+}
