@@ -24,6 +24,12 @@
                     <displayName>GemFire Server</displayName>
                     <category>SLAVE</category>
                     <cardinality>1+</cardinality>
+                    <dependencies>
+                        <dependency>
+                            <name>GEMFIRE/GEMFIRE_LOCATOR</name>
+                            <scope>cluster</scope>
+                        </dependency>
+                    </dependencies>
                     <commandScript>
                         <script>scripts/slave.py</script>
                         <scriptType>PYTHON</scriptType>
@@ -32,7 +38,8 @@
                 </component>
              </components>
             <configuration-dependencies>
-              <config-type>gemfire-config</config-type>
+                <config-type>gemfire-config</config-type>
+                <config-type>gemfire-env</config-type>
             </configuration-dependencies>
         </service>
     </services>

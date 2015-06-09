@@ -1,9 +1,9 @@
 from resource_management import *
-import pwd
 
 class Master(Script):
 
 	def gemfire_user_exists(self):
+		import pwd
 		import params
 		try:
 			pwd.getpwnam(params.gemfire_user)
@@ -12,13 +12,25 @@ class Master(Script):
 			return False
 
 	def install(self, env):
+		import os
+		import params
+
+		env.set_params(params)
+
 		self.configure(env)
 
-		import os
+		cmd = 'tar -zvxf ' + params.gemfire_tarball_path + ' -C ' + params.gemfire_install_dir
+		Execute(cmd, user=params.gemfire_user, timeout=300)
+
+		cmd = 'ln -s ' + params.gemfire_install_dir + '/' + os.path.basename(params.gemfire_tarball_path).split('.')[0] + ' ' + params.gemfire_install_target
+		Execute(cmd, user=params.gemfire_user, timeout=300)
+
+	def configure(self, env):
 		import crypt
 		import params
 
-		# create gemfire user if not exist
+		env.set_params(params)
+
 		if not self.gemfire_user_exists():
 			Group(params.gemfire_group)
 			User(params.gemfire_user,
@@ -27,67 +39,56 @@ class Master(Script):
 				groups=[params.gemfire_group],
 				ignore_failures=True)
 
-
-		# create gemfire install dir, owner set to gemfire:gemfire
 		Directory(params.gemfire_install_dir,
 			owner=params.gemfire_user,
 			group=params.gemfire_group,
 			recursive=True)
 
-		cmd = 'tar -zvxf ' + params.gemfire_tarball_path + ' -C ' + params.gemfire_install_dir
-		Execute(cmd, user=params.gemfire_user, timeout=300)
+		Directory(params.conf_dir,
+			owner=params.gemfire_user,
+			group=params.gemfire_group,
+			recursive=True)
 
-		cmd = 'ln -s ' + params.gemfire_install_dir + '/' + os.path.basename(params.gemfire_tarball_path).split('.')[0] + ' ' + params.gemfire_install_target
-		Execute(cmd, user=params.gemfire_user, timeout=300)
-
-		#cmd = 'export JAVA_HOME=$(dirname $(dirname $(readlink -f $(which javac))))'
-		#Execute(cmd, user=params.gemfire_user)
-
-		#cmd = 'export PATH=$PATH:$JAVA_HOME/bin:{0}/bin'.format(params.gemfire_install_dir)
-		#Execute(cmd, user=params.gemfire_user)
-
-	def configure(self, env):
-		import params
-		env.set_params(params)
-
-	def start(self, env):
-		self.configure(env)
-
-		import params
-
-		# create gemfire working dir, owner set to gemfire:gemfire
 		Directory(params.gemfire_locator_dir,
 			owner=params.gemfire_user,
 			group=params.gemfire_group,
 			recursive=True)
 
-		cmd = """
-export JAVA_HOME=/usr/jdk64/jdk1.7.0_67
-export PATH=$PATH:$JAVA_HOME/bin:{0}/bin
-gfsh << EOF
-start locator --name=locator-$HOSTNAME --port={1} --dir={2} --J=-Dgemfire.jmx-manager=true --J=-Dgemfire.jmx-manager-start=true
-exit;
-EOF"""
-		Execute(
-			cmd.format(params.gemfire_install_target,
-				params.gemfire_locator_port,
-				params.gemfire_locator_dir),
-			user=params.gemfire_user,
-			timeout=300)
+		File(format("{conf_dir}/gemfire-env.sh"),
+			owner=params.gemfire_user,
+			group=params.gemfire_group,
+			content=InlineTemplate(params.gemfire_env_sh_template))
 
-	def stop(self, env):
+		File(format("{conf_dir}/locator.properties"),
+			owner=params.gemfire_user,
+			group=params.gemfire_group,
+			content=InlineTemplate(params.gemfire_locator_properties_file))
+
+	def start(self, env):
+		import params
+		env.set_params(params)
+
 		self.configure(env)
 
-		import params
-
 		cmd = """
-export JAVA_HOME=/usr/jdk64/jdk1.7.0_67
-export PATH=$PATH:$JAVA_HOME/bin:{0}/bin
+source {conf_dir}/gemfire-env.sh
 gfsh << EOF
-stop locator --dir={1}
+start locator --name=locator-$HOSTNAME --port={gemfire_locator_port} --dir={gemfire_locator_dir} --properties-file={conf_dir}/locator.properties
 exit;
 EOF"""
-		Execute(cmd.format(params.gemfire_install_target, params.gemfire_locator_dir), user=params.gemfire_user)
+		Execute(format(cmd), user=params.gemfire_user, timeout=300)
+
+	def stop(self, env):
+		import params
+		env.set_params(params)
+
+		cmd = """
+source {conf_dir}/gemfire-env.sh
+gfsh << EOF
+stop locator --dir={gemfire_locator_dir}
+exit;
+EOF"""
+		Execute(format(cmd), user=params.gemfire_user)
 
 	def status(self, env):
 		import status_params

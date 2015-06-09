@@ -14,5 +14,19 @@
     <value>/data/gemfire/server</value>
     <description>GemFire Server process ID directory.</description>
   </property>
-  
+
+  <property>
+    <name>content</name>
+    <description>This is the jinja template for gemfire-env.sh file</description>
+    <value>
+#!/bin/bash
+
+# Set GemFire specific environment variables here.
+export GEMFIRE_HOME={{gemfire_install_target}}
+export GEMFIRE=$GEMFIRE_HOME
+export JAVA_HOME={{java64_home}}
+export GF_JAVA=$JAVA_HOME/bin/java
+export PATH=$PATH:$JAVA_HOME/bin:$GEMFIRE/bin
+    </value>
+  </property>
 </configuration> 

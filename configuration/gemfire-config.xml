@@ -43,7 +43,7 @@
   <property>
     <name>gemfire.locator.port</name>
     <value>10334</value>
-    <description>Port for GemFire locator. Default is 10334.</description>
+    <description>Port for GemFire locator. Default is 10334. When installing in a cloud environment (e.g., AWS, GCE, Azure, etc.), please make sure this port is properly configured in your firewall policy.</description>
   </property>
 
   <property>
@@ -55,7 +55,36 @@
   <property>
     <name>gemfire.server.port</name>
     <value>10334</value>
-    <description>Port for GemFire server. Default is 10334</description>
+    <description>Port for GemFire server. Default is 10334. When installing in a cloud environment (e.g., AWS, GCE, Azure, etc.), please make sure this port is properly configured in your firewall policy.</description>
   </property>
-  
+
+  <property>
+    <name>gemfire.locator.properties.file</name>
+    <description>Content of --properties.file for GemFire Locator.</description>
+    <value>
+jmx-manager=true
+jmx-manager-start=true
+http-service-port=7070
+jmx-manager-port=1099
+membership-port-range=2303-2308
+memcached-port=8118
+tcp-port=8161
+log-level=info
+statistic-sampling-enabled=true
+    </value>
+  </property>
+
+  <property>
+    <name>gemfire.server.properties.file</name>
+    <description>Content of --properties.file for GemFire Server.</description>
+    <value>
+jmx-manager=false
+jmx-manager-start=false
+log-level=info
+membership-port-range=2303-2308
+memcached-port=8118
+tcp-port=8161
+statistic-sampling-enabled=true
+    </value>
+  </property>
 </configuration>
